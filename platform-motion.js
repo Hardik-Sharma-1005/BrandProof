@@ -1,6 +1,7 @@
+document.documentElement.classList.add('js');
 document.addEventListener('DOMContentLoaded', () => {
   const revealTargets = document.querySelectorAll('[data-scroll-reveal]');
-  if (!('IntersectionObserver' in window) || revealTargets.length === 0) {
+  if (typeof window.IntersectionObserver !== 'function' || revealTargets.length === 0) {
     revealTargets.forEach((element) => element.classList.add('is-visible'));
     return;
   }
