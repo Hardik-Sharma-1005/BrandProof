@@ -114,7 +114,7 @@ function findingStatus(review, finding) {
   </div>`;
 }
 
-function renderFinding(finding, review) {
+function renderFinding(finding, review, index = 0) {
   const issueMarkup = finding.issues.map((issue) => {
     const sourceLabel = issue.source_verified
       ? "POLICY EXCERPT MATCHED"
@@ -148,7 +148,7 @@ function renderFinding(finding, review) {
   const suggestion = finding.suggested_sentence
     ? `<div class="finding-body suggestion-box"><div class="suggestion-label">SUGGESTED COPY</div><p class="suggestion-text">${esc(finding.suggested_sentence)}</p></div>`
     : `<div class="finding-body suggestion-box"><div class="suggestion-label">NO AUTOMATIC REWRITE</div><p class="suggestion-text">Use the source and next step above to revise this copy. BrandProof leaves factual claims for a human to rewrite.</p></div>`;
-  return `<article class="finding-card ${esc(finding.severity)}" data-finding-id="${esc(finding.id)}">
+  return `<article class="finding-card ${esc(finding.severity)}" data-finding-id="${esc(finding.id)}" data-scroll-reveal style="--delay:${index * 70}ms;">
     ${issueMarkup}
     ${suggestion}
     ${findingStatus(review, finding)}
@@ -228,8 +228,9 @@ function renderReview(syncInputs = true) {
   const coverageNote = coverage.workspace_rules !== undefined
     ? `Checked ${coverage.built_in_rules || 0} built-in and ${coverage.workspace_rules || 0} workspace rules. ${coverage.reference_only_sources || 0} reference-only or paused source${coverage.reference_only_sources === 1 ? " is" : "s are"} not scanned.`
     : "";
-  summary.innerHTML = `<span class="summary-chip high">${severityCounts.high} high</span><span class="summary-chip medium">${severityCounts.medium} medium</span><span class="summary-chip low">${severityCounts.low} low</span><span class="summary-chip">${total} finding${total === 1 ? "" : "s"}</span><p class="summary-message">${isCurrent ? "Latest scan matches this draft and source set." : "Draft or automated sources changed after the last scan. Re-run review before approval."} ${esc(coverageNote)} ${esc(review.reviewNote || "")}</p>`;
-  list.innerHTML = total ? review.findings.map((finding) => renderFinding(finding, review)).join("") : `<div class="no-findings"><strong>No configured rule triggered</strong><p>This is not a compliance guarantee. A human reviewer still needs to make the final decision.</p></div>`;
+  const staleText = !isCurrent ? "Draft or automated sources changed after the last scan. Re-run review before approval." : "Latest scan matches this draft and source set.";
+  summary.innerHTML = `<span class="summary-chip high">${severityCounts.high} high</span><span class="summary-chip medium">${severityCounts.medium} medium</span><span class="summary-chip low">${severityCounts.low} low</span><span class="summary-chip">${total} finding${total === 1 ? "" : "s"}</span><p class="summary-message">${staleText} ${esc(coverageNote)} ${esc(review.reviewNote || "")}</p>`;
+  list.innerHTML = total ? review.findings.map((finding, index) => renderFinding(finding, review, index)).join("") : `<div class="no-findings"><strong>No configured rule triggered</strong><p>This is not a compliance guarantee. A human reviewer still needs to make the final decision.</p></div>`;
   const role = $("#role-select").value;
   const canReview = role === "manager" || role === "reviewer";
   const approve = $("#approve-review");
@@ -476,7 +477,7 @@ function sourceCard(source, userAdded = false) {
   const sourceActions = userAdded
     ? `<div class="source-actions">${source.check_type && source.check_type !== "reference" ? `<button class="text-button" data-source-action="toggle-enabled" data-source-id="${esc(source.id)}">${source.enabled === false ? "Enable check" : "Pause check"}</button>${canManageSources ? `<button class="text-button" data-source-action="toggle-approval" data-source-id="${esc(source.id)}">${source.approved ? "Revoke approval" : "Approve source"}</button>` : ""}` : ""}<button class="text-button" data-source-action="remove" data-source-id="${esc(source.id)}">Remove source</button></div>`
     : "";
-  return `<article class="source-card">
+  return `<article class="source-card" data-scroll-reveal>
     <div class="source-meta"><span class="source-id">${esc(source.id)}</span><span class="source-type">${esc(source.type || "Approved source")}</span></div>
     <h3>${esc(source.title)}</h3><p>${esc(source.body)}${sourceDetails ? `<br><span>${esc(sourceDetails)}</span>` : ""}</p>
     <div class="source-owner"><span>${esc(source.owner || (userAdded ? "Workspace member" : "Brand team"))}</span><span>${esc(automation)}</span>${sourceActions}</div>
@@ -558,7 +559,7 @@ function renderActivity() {
   container.innerHTML = state.reviews.map((review) => {
     const status = review.status === "approved" ? "Approved" : review.status === "changes-requested" ? "Changes requested" : "In review";
     const events = (review.events || []).map((event) => `<div class="event-row"><span class="event-marker"></span><div class="event-copy"><strong>${esc(event.action)}</strong> · ${esc(event.actor)}<br>${esc(event.detail)}</div><span class="event-time">${esc(dateLabel(event.at))}</span></div>`).join("");
-    return `<article class="activity-card"><div class="activity-card-head" data-open-review="${esc(review.id)}"><div><h3>${esc(review.title)}</h3><p>${esc(review.draft.slice(0, 115))}${review.draft.length > 115 ? "…" : ""} · ${esc(dateLabel(review.createdAt))}</p></div><span class="activity-badge">${status}</span></div><div class="activity-events">${events}</div></article>`;
+    return `<article class="activity-card" data-scroll-reveal><div class="activity-card-head" data-open-review="${esc(review.id)}"><div><h3>${esc(review.title)}</h3><p>${esc(review.draft.slice(0, 115))}${review.draft.length > 115 ? "…" : ""} · ${esc(dateLabel(review.createdAt))}</p></div><span class="activity-badge">${status}</span></div><div class="activity-events">${events}</div></article>`;
   }).join("");
   container.querySelectorAll("[data-open-review]").forEach((button) => button.addEventListener("click", () => {
     state.activeId = button.dataset.openReview;

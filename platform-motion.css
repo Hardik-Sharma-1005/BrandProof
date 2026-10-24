@@ -1,0 +1,23 @@
+[data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 480ms cubic-bezier(.22,1,.36,1), transform 480ms cubic-bezier(.22,1,.36,1);
+}
+
+[data-scroll-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-scroll-reveal] > * {
+  transition: opacity 420ms ease, transform 420ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-reveal],
+  [data-scroll-reveal] > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
