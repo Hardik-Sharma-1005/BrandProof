@@ -8,10 +8,8 @@
   <title>BrandProof | Review workspace</title>
   <link rel="icon" type="image/png" href="/brandproof-stamp-logo.png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/watch-spinner.css">
-  <link rel="stylesheet" href="/platform-motion.css">
-  <script defer src="/watch-spinner.js"></script>
-  <script defer src="/platform-motion.js"></script>
+  <link rel="stylesheet" href="/depth-orbs.css">
+  <script defer src="/depth-orbs.js"></script>
   <script defer src="/app.js"></script>
 </head>
 <body>
@@ -76,10 +74,7 @@
               <div><div class="section-kicker">REVIEW OUTPUT</div><h2 id="results-title">Findings</h2></div>
               <div class="results-header-actions"><button class="text-button hidden" id="new-review">New review</button><span id="results-status" class="status-pill neutral">NOT RUN</span></div>
             </div>
-            <div id="review-processing" class="review-status" data-state="idle" role="status" aria-live="polite" aria-atomic="true" aria-busy="false" hidden>
-              <watch-spinner class="review-status__spinner" aria-hidden="true"></watch-spinner>
-              <span id="review-processing-label" class="review-status__label"></span>
-            </div>
+            <depth-orbs id="review-processing" class="review-status" data-state="idle" role="status" aria-live="polite" aria-atomic="true" aria-busy="false" hidden></depth-orbs>
             <div id="results-empty" class="empty-state">
               <p class="empty-overline">READY TO CHECK</p>
               <p>Run the sample draft to see how each finding links to its source rule.</p>

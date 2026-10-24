@@ -63,7 +63,16 @@ function showToast(message) {
 
 function setReviewProcessing(state, label) {
   const status = $("#review-processing");
-  if (status?.setProps) status.setProps({ state, label });
+  if (!status) return;
+  if (typeof status.setProps === "function") {
+    status.setProps({ state, label });
+    return;
+  }
+  status.dataset.state = state;
+  status.hidden = state === "idle";
+  status.setAttribute("aria-busy", state === "loading" ? "true" : "false");
+  const labelNode = status.querySelector("#review-processing-label, .depth-orbs__label") || status.querySelector("span");
+  if (labelNode) labelNode.textContent = label || "";
 }
 
 function navigate(page) {
