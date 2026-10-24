@@ -1,0 +1,50 @@
+:root {
+  --watch-spinner-size: 18px;
+  --watch-spinner-color: #023b7b;
+  --watch-spinner-ring: rgba(2, 59, 123, 0.18);
+}
+
+watch-spinner {
+  --size: var(--watch-spinner-size);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  vertical-align: middle;
+}
+
+watch-spinner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--watch-spinner-ring);
+  border-top-color: var(--watch-spinner-color);
+  border-right-color: var(--watch-spinner-color);
+  animation: brandproof-spin 760ms linear infinite;
+}
+
+watch-spinner[data-state="complete"]::before,
+watch-spinner[data-state="error"]::before {
+  animation: none;
+}
+
+watch-spinner[data-state="complete"]::before {
+  border-color: rgba(24, 132, 81, 0.28);
+  border-top-color: #188451;
+  border-right-color: #188451;
+}
+
+watch-spinner[data-state="error"]::before {
+  border-color: rgba(186, 49, 42, 0.25);
+  border-top-color: var(--brand-tomato, #fa0717);
+  border-right-color: var(--brand-tomato, #fa0717);
+}
+
+@keyframes brandproof-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
