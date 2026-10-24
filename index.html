@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fdfcec">
+  <meta name="description" content="Review campaign copy against an approved sample brand book before publication.">
+  <title>BrandProof | Review workspace</title>
+  <link rel="icon" type="image/png" href="/brandproof-stamp-logo.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/watch-spinner.css">
+  <link rel="stylesheet" href="/platform-motion.css">
+  <script defer src="/watch-spinner.js"></script>
+  <script defer src="/platform-motion.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="brand-ambient" aria-hidden="true"><span class="brand-ambient__stamp brand-ambient__stamp--primary"></span><span class="brand-ambient__stamp brand-ambient__stamp--secondary"></span></div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand-lockup brand-lockup-image" href="/" aria-label="BrandProof home"><span class="brand-logo-crop"><img src="/brandproof-stamp-logo.png" alt=""></span></a>
+      <div class="workspace-label"><span class="workspace-name">Acme Skin</span><span class="workspace-kind">SAMPLE WORKSPACE</span></div>
+      <nav class="top-nav" aria-label="Workspace navigation">
+        <button class="nav-item active" data-page="review">Review</button>
+        <button class="nav-item" data-page="library">Brand library</button>
+        <button class="nav-item" data-page="activity">History <span id="history-count" class="nav-count">0</span></button>
+      </nav>
+      <div class="top-actions">
+        <label class="role-wrap" for="role-select"><span>Role</span>
+          <select id="role-select" aria-label="Choose demo role">
+            <option value="creator">Creator</option>
+            <option value="manager">Brand manager</option>
+            <option value="reviewer">Legal reviewer</option>
+          </select>
+        </label>
+        <span class="save-status" id="save-status">Saved in this browser</span>
+        <button class="text-button" id="clear-data" title="Clear locally saved demo data">Clear local data</button>
+      </div>
+    </header>
+
+    <main class="main-area" id="main-content" tabindex="-1">
+      <div class="crumb"><span>Acme Skin</span><span>/</span><strong id="page-crumb">Review</strong></div>
+
+      <section id="page-review" class="page active-page">
+        <div class="page-intro" data-scroll-reveal>
+          <div>
+            <div class="eyebrow">CONTENT GOVERNANCE <span class="eyebrow-divider">/</span> FICTIONAL SAMPLE</div>
+            <h1>Review before publishing</h1>
+            <p>Check the draft against Acme Skin's sample rules and enabled workspace sources.</p>
+          </div>
+          <button class="text-button sample-button" id="load-sample">Reload example draft</button>
+        </div>
+
+        <div class="review-grid">
+          <section class="draft-panel" aria-labelledby="draft-heading" data-scroll-reveal>
+            <div class="section-heading">
+              <div><div class="section-kicker">DRAFT 02</div><h2 id="draft-heading">Campaign copy</h2></div>
+              <label class="upload-link" for="file-input">Import a file<input id="file-input" type="file" accept=".txt,.md,.csv,.pdf,.docx"></label>
+            </div>
+            <label class="field-label" for="draft-title">Review name</label>
+            <input id="draft-title" class="text-input" maxlength="90" value="Spring campaign post" placeholder="Name this review">
+            <label class="field-label content-label" for="content-input">Copy</label>
+            <textarea id="content-input" class="content-input" placeholder="Paste copy here, or import a text, PDF or Word file..." spellcheck="true"></textarea>
+            <div class="input-meta"><span id="char-count">0 characters</span><span>Limit 24,000</span></div>
+            <div id="upload-message" class="upload-message" aria-live="polite"></div>
+            <div class="panel-actions">
+              <span class="privacy-note">Drafts are stored in this browser.</span>
+              <button class="button primary" id="run-review">Run review</button>
+            </div>
+            <p class="disclosure">Exact phrase checks use sample rules and enabled workspace sources. A reviewer judges whether evidence supports each claim.</p>
+          </section>
+
+          <section class="results-panel" aria-labelledby="results-title" data-scroll-reveal>
+            <div class="results-header">
+              <div><div class="section-kicker">REVIEW OUTPUT</div><h2 id="results-title">Findings</h2></div>
+              <div class="results-header-actions"><button class="text-button hidden" id="new-review">New review</button><span id="results-status" class="status-pill neutral">NOT RUN</span></div>
+            </div>
+            <div id="review-processing" class="review-status" data-state="idle" role="status" aria-live="polite" aria-atomic="true" aria-busy="false" hidden>
+              <watch-spinner class="review-status__spinner" aria-hidden="true"></watch-spinner>
+              <span id="review-processing-label" class="review-status__label"></span>
+            </div>
+            <div id="results-empty" class="empty-state">
+              <p class="empty-overline">READY TO CHECK</p>
+              <p>Run the sample draft to see how each finding links to its source rule.</p>
+            </div>
+            <div id="results-summary" class="summary-row hidden"></div>
+            <div id="findings-list" class="findings-list"></div>
+            <div id="review-controls" class="review-controls hidden">
+              <button class="text-button" id="rescan">Run review again</button>
+              <div class="workflow-buttons"><button class="button secondary" id="request-changes">Request changes</button><button class="button approve" id="approve-review">Approve review</button></div>
+            </div>
+            <div id="workflow-note" class="workflow-note hidden" aria-live="polite"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="page-library" class="page">
+        <div class="page-intro" data-scroll-reveal>
+          <div><div class="eyebrow">ACME SKIN <span class="eyebrow-divider">/</span> POLICIES AND EVIDENCE</div><h1>Brand library</h1><p>Manage the sources and phrase checks used in future reviews.</p></div>
+          <button class="button secondary" id="add-source">Add source or rule</button>
+        </div>
+        <div class="library-note" data-scroll-reveal><strong>Sources and checks</strong><p>Add evidence tied to a claim, flag or require exact phrases, or save a reference for human review. New checks appear as unapproved until a manager/reviewer approves them. Claim evidence is surfaced with findings but is never treated as proof automatically.</p></div>
+        <div id="source-form-wrap" class="source-form-wrap hidden"></div>
+        <div id="source-list" class="source-list"></div>
+      </section>
+
+      <section id="page-activity" class="page">
+        <div class="page-intro" data-scroll-reveal>
+          <div><div class="eyebrow">ACME SKIN <span class="eyebrow-divider">/</span> AUDIT TRAIL</div><h1>Review history</h1><p>Decisions and revisions saved in this browser.</p></div>
+          <button class="button secondary" id="export-history">Export history</button>
+        </div>
+        <div id="activity-content" class="activity-content"></div>
+      </section>
+
+      <footer class="app-footer">
+        <span class="footer-brand"><span class="brand-logo-crop brand-logo-crop-small"><img src="/brandproof-stamp-logo.png" alt="BrandProof"></span></span>
+        <span>LOCAL DEMO</span>
+        <span>Fictional sample data</span>
+        <div class="footer-links"><button class="text-button" id="privacy-link">Privacy and data</button><button class="text-button" id="terms-link">Terms of use</button></div>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="edit-dialog" class="edit-dialog"><form method="dialog">
+    <div class="dialog-top"><div><div class="section-kicker">EDIT SUGGESTION</div><h2>Revise the sentence</h2></div><button class="text-button" value="cancel" aria-label="Close">Close</button></div>
+    <p>Save your wording to this review, then run the checks again.</p><textarea id="edit-text" class="edit-textarea"></textarea>
+    <div class="dialog-actions"><button class="button secondary" value="cancel">Cancel</button><button class="button primary" id="save-edit" value="save">Save edit</button></div>
+  </form></dialog>
+
+  <dialog id="note-dialog" class="edit-dialog"><form id="note-form">
+    <div class="dialog-top"><div><div class="section-kicker">REVIEW NOTE</div><h2 id="note-dialog-title">Add a decision note</h2></div><button class="text-button" id="cancel-note" type="button">Close</button></div>
+    <p id="note-dialog-description">Add a reason so the decision is clear to the next reviewer.</p>
+    <label class="field-label" for="note-text">Decision note</label><textarea id="note-text" class="edit-textarea" maxlength="1200" required></textarea>
+    <div class="dialog-actions"><button class="button secondary" id="cancel-note-secondary" type="button">Cancel</button><button class="button primary" type="submit">Save note</button></div>
+  </form></dialog>
+
+  <dialog id="privacy-dialog" class="info-dialog"><div class="dialog-top"><div><div class="section-kicker">LOCAL DEMO</div><h2>Privacy and data</h2></div><button class="text-button" data-close-dialog="privacy-dialog">Close</button></div>
+    <p>Review drafts, decisions, sources and history are kept in this browser's local storage. During a scan, the browser sends the draft and enabled source excerpts to the local BrandProof service for matching. The service returns findings and does not save them. Uploaded files are parsed in memory.</p>
+    <p>This demo does not send content to an AI provider or other external service. Use the clear-data control to remove saved demo records from this browser. The role selector is for demonstration and does not provide account security.</p>
+  </dialog>
+
+  <dialog id="terms-dialog" class="info-dialog"><div class="dialog-top"><div><div class="section-kicker">LOCAL DEMO</div><h2>Terms of use</h2></div><button class="text-button" data-close-dialog="terms-dialog">Close</button></div>
+    <p>BrandProof is a fictional prototype for demonstrating a content review workflow. Its rules and suggested edits are illustrative and are not legal, clinical or regulatory advice.</p>
+    <p>A clean scan is not a compliance guarantee. A qualified human reviewer should assess the final copy and its supporting evidence before publication. Do not use this local demo for confidential production material.</p>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
